@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+server/node_modules/
+client/node_modules/
+
+# Environment variables
+# .env
+# server/.env
+# client/.env
+
+# Build outputs
+client/dist/
+server/public/dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.idea/
+
+# TypeScript (legacy - migrated to JS)
+*.js.map
+dist/
+node_modules
+.next
