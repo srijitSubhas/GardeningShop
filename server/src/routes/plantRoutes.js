@@ -4,9 +4,9 @@ const { getAllPlants, getPlantById } = require('../controllers/plantController')
 const { isAuthenticated } = require('../middleware/auth');
 
 // GET /api/plants  - protected: must be logged in to browse
-router.get('/', isAuthenticated, getAllPlants);
+router.get('/', getAllPlants);
 
 // GET /api/plants/:id
-router.get('/:id', isAuthenticated, getPlantById);
+router.get('/:id', getPlantById);
 
 module.exports = router;
