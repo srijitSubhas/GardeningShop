@@ -1,0 +1,113 @@
+--------------------------------------------------------------
+Install root, server, and client npm dependencies [cd, npm run]
+----------
+cd /d "d:\CRM\GargenShopping" && npm run install:all
+
+At C:\Users\subhasishp\AppData\Local\Temp\ps-script-2480b026-6299-4000-b5c8-716802be4c9f.ps1:7 char:31
++ cd /d "d:\CRM\GargenShopping" && npm run install:all
++                               ~~
+The token '&&' is not a valid statement separator in this version.
+    + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : InvalidEndOfLine
+	
+--------------------------------------------------------------
+Install all npm dependencies (PowerShell) [Set-Location, npm run]
+----------	
+Set-Location "d:\CRM\GargenShopping"; npm run install:all
+
+> plant-shop@1.0.0 install:all
+> npm install && cd server && npm install && cd ../client && npm install
+
+
+up to date, audited 30 packages in 2s
+
+7 packages are looking for funding
+  run `npm fund` for details
+
+1 high severity vulnerability
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+
+up to date, audited 117 packages in 2s
+
+25 packages are looking for funding
+  run `npm fund` for details
+
+4 vulnerabilities (1 moderate, 3 high)
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+
+up to date, audited 94 packages in 2s
+
+13 packages are looking for funding
+  run `npm fund` for details
+
+4 vulnerabilities (2 moderate, 1 high, 1 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+--------------------------------------------------------------	
+Start server and Vite client in dev mode [npm run] 
+----------
+npm run dev
+
+
+--------------------------------------------------------------
+Here’s what’s running on your machine right now.
+----------
+Running now
+Frontend (Vite): http://localhost:3000/
+Backend API: http://localhost:3001/ (API under /api)
+npm run dev was started from the project root; the server log shows MySQL connected and both processes are up.
+
+How to run it yourself next time
+MySQL — Have MySQL running and the plant_shop database created (if you haven’t yet, from the repo root:
+mysql -u root -p < db_setup.sql — use your own credentials.)
+server/.env — Match DB_* and PORT to your setup (you already have this file).
+Install once:
+npm run install:all
+(from d:\CRM\GargenShopping)
+Dev:
+npm run dev
+Open http://localhost:3000/ in the browser; the Vite dev server proxies /api to the backend as described in the README.
+
+To stop the app, focus the terminal where npm run dev is running and press Ctrl+C.
+
+
+
+--------------------------------------------------------------
+stop the application and also mysql
+----------
+
+Here’s what was done:
+
+Application (dev servers)
+The processes using 3001 (API) and 3000 (Vite) were stopped with taskkill. Nothing should be listening on those ports now.
+
+Note: If a parent terminal still shows npm run dev, you can close that window or press Ctrl+C there so it doesn’t try to start things again.
+
+MySQL
+Stopping the MySQL84 service failed with Access is denied (error 5). That usually means the shell isn’t running as Administrator.
+
+Run one of these in an elevated PowerShell or CMD (right‑click → Run as administrator):
+
+Stop-Service -Name MySQL84 -Force
+or:
+
+net stop MySQL84
+To start it again later:
+
+Start-Service MySQL84
+If your service name is different, list MySQL services with:
+
+Get-Service *mysql*
