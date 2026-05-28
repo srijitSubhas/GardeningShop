@@ -105,6 +105,15 @@ This starts:
 - **Server** at `http://localhost:3001`
 - **Client** at `http://localhost:3000` (proxies `/api` → server)
 
+### 5. Run in Production / Coolify
+
+```bash
+npm start
+```
+
+This builds the React client into `server/public` and starts the Express server.
+If you deploy the frontend and backend on different domains, set `CLIENT_ORIGIN` to the public frontend URL.
+
 ---
 
 ## 🔌 API Endpoints
@@ -147,5 +156,5 @@ View (JSX pages)  ───►  Routes → Controllers → Models → Tables
 
 ```bash
 docker build -t plant-shop .
-docker run -p 7860:7860 --env-file server/.env plant-shop
+docker run -p 3001:3001 --env-file server/.env plant-shop
 ```

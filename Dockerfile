@@ -23,11 +23,10 @@ COPY --from=client-builder /app/client/dist ./server/public
 
 # Set environment
 ENV NODE_ENV=production
-ENV PORT=7860
 
 # Serve the built client from Express in production
 WORKDIR /app/server
 
-EXPOSE 7860
+EXPOSE 3001
 
 CMD ["node", "src/app.js"]
