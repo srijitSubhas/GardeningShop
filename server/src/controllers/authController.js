@@ -32,9 +32,16 @@ const signup = async (req, res) => {
     req.session.userEmail = user.email;
     req.session.userName = user.name;
 
-    return res.status(201).json({
-      message: 'Account created successfully.',
-      user: { id: user.id, name: user.name, email: user.email },
+    return req.session.save((saveErr) => {
+      if (saveErr) {
+        console.error('Signup session save error:', saveErr);
+        return res.status(500).json({ error: 'Failed to establish session.' });
+      }
+
+      return res.status(201).json({
+        message: 'Account created successfully.',
+        user: { id: user.id, name: user.name, email: user.email },
+      });
     });
   } catch (err) {
     console.error('Signup error:', err);
@@ -69,9 +76,16 @@ const login = async (req, res) => {
     req.session.userEmail = user.email;
     req.session.userName = user.name;
 
-    return res.json({
-      message: 'Login successful.',
-      user: { id: user.id, name: user.name, email: user.email },
+    return req.session.save((saveErr) => {
+      if (saveErr) {
+        console.error('Login session save error:', saveErr);
+        return res.status(500).json({ error: 'Failed to establish session.' });
+      }
+
+      return res.json({
+        message: 'Login successful.',
+        user: { id: user.id, name: user.name, email: user.email },
+      });
     });
   } catch (err) {
     console.error('Login error:', err);

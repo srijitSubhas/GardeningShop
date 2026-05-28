@@ -20,15 +20,17 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = useCallback(async (email, password) => {
-    const res = await authAPI.login({ email, password });
-    setUser(res.data.user);
-    return res.data;
+    await authAPI.login({ email, password });
+    const meRes = await authAPI.me();
+    setUser(meRes.data.user);
+    return { user: meRes.data.user };
   }, []);
 
   const signup = useCallback(async (name, email, password, phone) => {
-    const res = await authAPI.signup({ name, email, password, phone });
-    setUser(res.data.user);
-    return res.data;
+    await authAPI.signup({ name, email, password, phone });
+    const meRes = await authAPI.me();
+    setUser(meRes.data.user);
+    return { user: meRes.data.user };
   }, []);
 
   const logout = useCallback(async () => {
