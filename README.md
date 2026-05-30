@@ -121,6 +121,7 @@ NODE_ENV=production
 HOST=0.0.0.0
 PORT=3001
 TRUST_PROXY=1
+SERVE_CLIENT=true
 
 SESSION_SECRET=replace_with_strong_secret
 SESSION_COOKIE_NAME=garden_sid
@@ -136,6 +137,7 @@ Notes:
 - If frontend and backend are under the same site/domain, keep `SESSION_COOKIE_SAMESITE=lax`.
 - If they are cross-site, use `SESSION_COOKIE_SAMESITE=none` and `SESSION_COOKIE_SECURE=true` or `auto`.
 - If requests are still unauthorized, increase `TRUST_PROXY` (for example `2`) depending on proxy layers.
+- `SERVE_CLIENT=true` keeps the Express app serving the built React client even if `NODE_ENV` is not set correctly by the platform.
 
 ---
 

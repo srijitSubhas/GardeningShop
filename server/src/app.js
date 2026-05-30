@@ -4,6 +4,7 @@ const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 
 // Route imports
 const authRoutes = require('./routes/authRoutes');
@@ -109,15 +110,18 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// ─── Serve React client in production ────────────────────────────────────────
+// ─── Serve React client when a built bundle is available ─────────────────────
 
-if (process.env.NODE_ENV === 'production') {
-  const clientBuildPath = path.join(__dirname, '../../server/public');
+const clientBuildPath = path.join(__dirname, '../../server/public');
+const clientIndexPath = path.join(clientBuildPath, 'index.html');
+const shouldServeClient = process.env.SERVE_CLIENT !== 'false' && fs.existsSync(clientIndexPath);
+
+if (shouldServeClient) {
   app.use(express.static(clientBuildPath));
 
-  // All non-API routes serve the React app
+  // All non-API routes serve the React app.
   app.get('*', (req, res) => {
-    res.sendFile(path.join(clientBuildPath, 'index.html'));
+    res.sendFile(clientIndexPath);
   });
 }
 
