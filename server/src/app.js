@@ -16,6 +16,17 @@ const PORT = process.env.PORT || 3001;
 const HOST = process.env.HOST || '0.0.0.0';
 const isProduction = process.env.NODE_ENV === 'production';
 
+const parseBoolean = (value, defaultValue = false) => {
+  if (value === undefined || value === null || value === '') return defaultValue;
+  return String(value).toLowerCase() === 'true';
+};
+
+const trustProxyRaw = process.env.TRUST_PROXY;
+const trustProxySetting =
+  trustProxyRaw === undefined || trustProxyRaw === ''
+    ? (isProduction ? 1 : false)
+    : (Number.isNaN(Number(trustProxyRaw)) ? trustProxyRaw : Number(trustProxyRaw));
+
 const normalizeOrigin = (origin = '') => origin.trim().replace(/\/$/, '');
 const envOrigins = (process.env.CLIENT_ORIGIN || '')
   .split(',')
@@ -30,9 +41,28 @@ const allowedOrigins = new Set([
   ...envOrigins,
 ]);
 
-if (isProduction) {
+if (trustProxySetting !== false) {
   // Required when app is behind a proxy and secure cookies are enabled.
-  app.set('trust proxy', 1);
+  app.set('trust proxy', trustProxySetting);
+}
+
+const sessionSameSite = (process.env.SESSION_COOKIE_SAMESITE || (isProduction ? 'none' : 'lax')).toLowerCase();
+const sessionSecureDefault = isProduction ? 'auto' : false;
+const sessionSecure = process.env.SESSION_COOKIE_SECURE === undefined
+  ? sessionSecureDefault
+  : (process.env.SESSION_COOKIE_SECURE.toLowerCase() === 'auto'
+      ? 'auto'
+      : parseBoolean(process.env.SESSION_COOKIE_SECURE));
+
+const sessionCookieConfig = {
+  httpOnly: true,
+  secure: sessionSecure,
+  sameSite: sessionSameSite,
+  maxAge: 1000 * 60 * 60 * 24, // 24 hours
+};
+
+if (process.env.SESSION_COOKIE_DOMAIN) {
+  sessionCookieConfig.domain = process.env.SESSION_COOKIE_DOMAIN;
 }
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
@@ -57,15 +87,12 @@ app.use(express.urlencoded({ extended: true }));
 // Session configuration
 app.use(
   session({
+    name: process.env.SESSION_COOKIE_NAME || 'connect.sid',
     secret: process.env.SESSION_SECRET || 'plant_shop_secret',
     resave: false,
     saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? 'none' : 'lax',
-      maxAge: 1000 * 60 * 60 * 24, // 24 hours
-    },
+    proxy: trustProxySetting !== false,
+    cookie: sessionCookieConfig,
   })
 );
 

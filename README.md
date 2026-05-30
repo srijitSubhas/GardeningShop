@@ -114,6 +114,29 @@ npm start
 This builds the React client into `server/public` and starts the Express server.
 If you deploy the frontend and backend on different domains, set `CLIENT_ORIGIN` to the public frontend URL.
 
+Recommended Coolify environment variables:
+
+```env
+NODE_ENV=production
+HOST=0.0.0.0
+PORT=3001
+TRUST_PROXY=1
+
+SESSION_SECRET=replace_with_strong_secret
+SESSION_COOKIE_NAME=garden_sid
+SESSION_COOKIE_SECURE=auto
+SESSION_COOKIE_SAMESITE=lax
+
+# If frontend and backend are on different domains, use SESSION_COOKIE_SAMESITE=none
+# and ensure HTTPS is enabled.
+CLIENT_ORIGIN=https://your-frontend-domain.com
+```
+
+Notes:
+- If frontend and backend are under the same site/domain, keep `SESSION_COOKIE_SAMESITE=lax`.
+- If they are cross-site, use `SESSION_COOKIE_SAMESITE=none` and `SESSION_COOKIE_SECURE=true` or `auto`.
+- If requests are still unauthorized, increase `TRUST_PROXY` (for example `2`) depending on proxy layers.
+
 ---
 
 ## 🔌 API Endpoints
