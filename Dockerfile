@@ -27,6 +27,9 @@ ENV NODE_ENV=production
 # Serve the built client from Express in production
 WORKDIR /app/server
 
-EXPOSE 3001
+# PORT is injected by Coolify at runtime. Expose the same value so the
+# container networking matches. Default to 3001 for local Docker runs.
+ARG PORT=3001
+EXPOSE ${PORT}
 
 CMD ["node", "src/app.js"]
