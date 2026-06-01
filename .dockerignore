@@ -1,0 +1,23 @@
+# Dependencies – reinstalled inside the image
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Pre-built client assets – rebuilt inside the image from source
+server/public/
+
+# Local environment files – secrets must be injected via Coolify env vars
+.env
+.env.*
+!.env.example
+
+# Dev / editor artefacts
+.git/
+.gitignore
+*.md
+.vscode/
+.idea/
+
+# OS artefacts
+.DS_Store
+Thumbs.db

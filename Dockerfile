@@ -27,9 +27,9 @@ ENV NODE_ENV=production
 # Serve the built client from Express in production
 WORKDIR /app/server
 
-# PORT is injected by Coolify at runtime. Expose the same value so the
-# container networking matches. Default to 3001 for local Docker runs.
-ARG PORT=3001
-EXPOSE ${PORT}
+# Expose the port the Express server binds to (process.env.PORT || 3001).
+# Coolify uses this value to configure the reverse-proxy target.
+# Override PORT at runtime via Coolify's environment-variable settings.
+EXPOSE 3001
 
 CMD ["node", "src/app.js"]
